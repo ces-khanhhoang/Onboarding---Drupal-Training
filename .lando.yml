@@ -1,0 +1,29 @@
+name: onboarding-drupal-training
+recipe: drupal10
+config:
+  webroot: web
+services:
+  appserver:
+    build:
+      - composer install
+  database:
+    type: mysql
+    portforward: true
+    # PHPMyAdmin.
+  phpmyadmin:
+    type: phpmyadmin
+    overrides:
+      environment:
+        UPLOAD_LIMIT: 25600000
+    hosts:
+      - database
+  mailhog:
+    type: mailhog
+    portforward: true
+    hogfrom:
+      - appserver
+proxy:
+  mailhog:
+    - mail-onboarding-drupal-training.lndo.site
+  phpmyadmin:
+    - db-onboarding-drupal-training.lndo.site
